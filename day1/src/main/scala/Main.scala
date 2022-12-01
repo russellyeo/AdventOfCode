@@ -1,5 +1,6 @@
 @main def day1: Unit = 
-  val result = parse(puzzleInput).map(_.sum).max
+  val sums = parse(puzzleInput).map(_.sum)
+  val result = sums.sorted(Ordering.Int.reverse).take(3).sum
   println(s"result: $result")
   
 def parse(input: String): List[List[Int]] = 
