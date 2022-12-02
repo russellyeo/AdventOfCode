@@ -14,12 +14,15 @@ object RockPaperScissors {
         case Win, Draw, Lose
     
     def play(filename: String): Try[Int] =
-        val maybeStrategyGuide: Try[Map[String, String]] = strategyGuideFromFile(filename)
+        val maybeStrategyGuide: Try[List[(String, String)]] = strategyGuideFromFile(filename)
         maybeStrategyGuide.flatMap(x => playWithStrategyGuide(x))
 
-    def playWithStrategyGuide(strategyGuide: Map[String, String]): Try[Int] =
-        val maybeResults = Try(strategyGuide.map { case (k, v) => playRound(k, v) }.map(_.get))
-        maybeResults.map(x => x.sum)
+    def playWithStrategyGuide(strategyGuide: List[(String, String)]): Try[Int] =
+        val maybeResults = strategyGuide.map { 
+            case (opponent, me) => playRound(opponent, me) 
+        }
+        val flatMaybeResults = Try(maybeResults.map(_.get))
+        flatMaybeResults.map(x => x.sum)
 
     def playRound(opponent: String, me: String): Try[Int] =
         for
@@ -29,7 +32,7 @@ object RockPaperScissors {
             getRoundScore(getRoundResult(opponentSign, meSign)) + getSignScore(meSign)
 
     def getRoundResult(opponent: Sign, me: Sign): Result =
-        if (getSignScore(opponent) + 1) % 4 == getSignScore(me) then
+        if (getSignScore(opponent) % 3) + 1 == getSignScore(me) then
             return Result.Win
         else if getSignScore(opponent) == getSignScore(me) then
             return Result.Draw
@@ -60,7 +63,7 @@ object StrategyGuideParser {
     import scala.io.Source
     import scala.util.Using
 
-    def strategyGuideFromFile(filename: String): Try[Map[String, String]] = 
+    def strategyGuideFromFile(filename: String): Try[List[(String, String)]] = 
         val maybeLines: Try[List[String]] = readLinesFromFile(filename)
         maybeLines.map(lines => strategyGuide(lines))
 
@@ -69,10 +72,8 @@ object StrategyGuideParser {
             bufferedSource.getLines.toList
         }
 
-    def strategyGuide(lines: List[String]): Map[String, String] = 
-        val column1 = lines.map(x => x.take(1))
-        val column2 = lines.map(x => x.takeRight(1))
-        (column1 zip column2).toMap
+    def strategyGuide(lines: List[String]): List[(String, String)] = 
+        lines.map(x => (x.take(1), x.takeRight(1)))
 }
 
 // Run me with this command:
@@ -81,7 +82,7 @@ object StrategyGuideParser {
 def rockPaperScissorsApp =
     import RockPaperScissors.*
     
-    play("example.txt") match
+    play("input.txt") match
         case Success(total) => println(s"Your total is: $total")
         case Failure(error) => println(s"Failed: msg = ${error.getMessage}")
     
