@@ -21,4 +21,10 @@ class RockPaperScissorsTests extends munit.FunSuite:
         assert(result == expected)
     }
 
+    test("play example") {
+        val result = play("example.txt")
+        val expected = Success(15)
+        assert(result == expected)
+    }
+
 end RockPaperScissorsTests
