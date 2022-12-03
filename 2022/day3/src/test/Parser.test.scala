@@ -9,7 +9,7 @@ import Parser.*
 
 class ParserSpec extends AnyFlatSpec with should.Matchers {
 
-  "Parser" should "parse example.txt" in {
+  "parse()" should "parse example.txt into a List of (String, String) tuples" in {
     val input = parse("example.txt")
     input shouldBe Success(List(
         ("vJrwpWtwJgWr","hcsFMMfFFhFp"),

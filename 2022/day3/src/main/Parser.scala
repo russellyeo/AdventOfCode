@@ -1,7 +1,7 @@
 package day3
 
 import scala.io.Source
-import scala.util.{Try, Using}
+import scala.util.{Try, Using, Success, Failure }
 
 object Parser {
 
