@@ -1,4 +1,3 @@
-//> using scala "3"
 package day2
 
 import scala.io.Source
@@ -10,8 +9,8 @@ object StrategyGuideParser {
         val maybeLines: Try[List[String]] = readLinesFromFile(filename)
         maybeLines.map(lines => strategyGuide(lines))
 
-    def readLinesFromFile(filename: String): Try[List[String]] = 
-        Using(io.Source.fromFile(filename)) { bufferedSource =>
+    def readLinesFromFile(filename: String): Try[List[String]] =
+        Using(Source.fromResource(filename)) { bufferedSource =>
             bufferedSource.getLines.toList
         }
 

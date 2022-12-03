@@ -1,4 +1,3 @@
-//> using scala "3"
 package day2
 
 import scala.util.{Try, Success, Failure}
@@ -10,6 +9,7 @@ object PartOne {
     def play(filename: String): Try[Int] =
         val maybeStrategyGuide: Try[List[(String, String)]] = strategyGuideFromFile(filename)
         maybeStrategyGuide.flatMap(x => playWithStrategyGuide(x))
+        
 
     def playWithStrategyGuide(strategyGuide: List[(String, String)]): Try[Int] =
         val maybeResults = strategyGuide.map { 

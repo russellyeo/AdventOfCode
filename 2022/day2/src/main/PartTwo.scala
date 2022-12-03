@@ -1,4 +1,3 @@
-//> using scala "3"
 package day2
 
 import scala.util.{Try, Success, Failure}

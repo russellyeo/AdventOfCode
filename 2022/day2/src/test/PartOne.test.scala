@@ -1,5 +1,3 @@
-//> using scala "3"
-//> using lib "org.scalameta::munit::0.7.29"
 package day2
 
 import PartOne.*
