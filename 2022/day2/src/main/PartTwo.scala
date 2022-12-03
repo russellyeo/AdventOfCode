@@ -44,7 +44,7 @@ object PartTwo {
         else if opponentSign == Sign.Scissors && desiredResult == Result.Lose then
             Success(Sign.Paper)
         else 
-            Failure(new java.lang.IllegalArgumentException)
+            Failure(new Exception("Unable to choose sign - unknown combination"))
 
     def getRoundResult(opponent: Sign, me: Sign): Result =
         if (getSignScore(opponent) % 3) + 1 == getSignScore(me) then
@@ -59,14 +59,14 @@ object PartTwo {
             case "A" => Success(Sign.Rock)
             case "B" => Success(Sign.Paper)
             case "C" => Success(Sign.Scissors)
-            case _ => Failure(new java.lang.IllegalArgumentException)
+            case _ => Failure(new Exception("Unrecognised sign letter"))
 
     def decryptResult(letter: String): Try[Result] =
         letter match
             case "X" => Success(Result.Lose)
             case "Y" => Success(Result.Draw)
             case "Z" => Success(Result.Win)
-            case _ => Failure(new java.lang.IllegalArgumentException)
+            case _ => Failure(new Exception("Unrecognised result letter"))
 }
 
 // Run me with this command:

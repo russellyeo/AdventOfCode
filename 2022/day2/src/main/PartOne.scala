@@ -38,7 +38,7 @@ object PartOne {
             case "A" | "X" => Success(Sign.Rock)
             case "B" | "Y" => Success(Sign.Paper)
             case "C" | "Z" => Success(Sign.Scissors)
-            case _ => Failure(new java.lang.IllegalArgumentException)
+            case _ => Failure(new Exception("Unrecognised sign letter"))
 }
 
 // Run me with this command:
