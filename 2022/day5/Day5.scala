@@ -10,28 +10,42 @@ object Day5 {
 
     case class Action(count: Int, from: Int, to: Int)
     case class Input(crates: List[List[Char]], actions: List[Action])
+    case class Output(part1: String, part2: String)
     
     /** 
      * Parse a given file and find the answer 
      * 
      * - Load the file
      * - Parse the file into the challenge input
-     * - Perform the actions on the crates
-     * - Return the top crate from each stack
+     * - Process the input, moving multiple crates in order for part 2
      * */
-    def solve(filename: String): List[Char] =
-        load(filename)
-            .pipe(parse)
-            .pipe(apply)
-            .map(_.head)
-
-    /** Move the crates according to the actions */
-    def apply(input: Input): List[List[Char]] =
-        input.actions.foldLeft(input.crates)(move)
-
+    def solve(filename: String): Output =
+        load(filename).pipe(parse).pipe { input => 
+            Output(
+                process(input, moveInOrder = false),
+                process(input, moveInOrder = true)
+            )
+        }
+    
     /** Load a list of strings from the file */
     def load(filename: String): List[String] =
         Using(Source.fromResource(filename))(bs => bs.getLines.toList).get
+
+     /** 
+      * Process the input
+      * 
+      * - Apply the actions on the crates
+      * - Return the top crate from each stack (joined as a string)
+      * */
+    def process(input: Input, moveInOrder: Boolean): String =
+        input
+            .pipe(input => apply(input, moveInOrder))
+            .map(_.head)
+            .mkString("")
+
+    /** Move the crates according to the actions */
+    def apply(input: Input, moveInOrder: Boolean): List[List[Char]] =
+        input.actions.foldLeft(input.crates)((crates, action) => move(crates, action, moveInOrder))
 
     /** 
      * Parse a list of strings into the challenge input 
@@ -51,11 +65,11 @@ object Day5 {
      * 
      * - Transpose the list of strings (rotate the crates 90 degrees)
      * - Filter by letters
-     * - Filter out whitespace
+     * - Remove empty strings
      * - Convert to a list
      * */
-    def parseCrates(input: List[String]): List[List[Char]] =
-        input
+    def parseCrates(lines: List[String]): List[List[Char]] =
+        lines
             .transpose
             .map(_.filter(_.isLetter))
             .filterNot(_.isEmpty)
@@ -68,8 +82,8 @@ object Day5 {
      * - Convert to a list of integers
      * - Convert to an Action
      * */
-    def parseActions(input: List[String]): List[Action] =
-        input
+    def parseActions(lines: List[String]): List[Action] =
+        lines
             .map(line => ("\\d+".r).findAllIn(line))
             .map(_.toList.map(_.toInt))
             .collect { case List(count, from, to) => Action(count, from, to) }
@@ -79,17 +93,20 @@ object Day5 {
      * 
      * Iterate over the stacks of crates, and:
      * - If it is the 'from' stack, remove the top n crates
-     * - If it is the 'to' stack, add the top n crates from the 'from' stack (but in reverse order)
+     * - If it is the 'to' stack, add the top n crates from the 'from' stack (in order if needed or reverse order if not)
      * - Otherwise, leave the stack unchanged
      * */
-    def move(crates: List[List[Char]], action: Action): List[List[Char]] =
+    def move(crates: List[List[Char]], action: Action, moveInOrder: Boolean): List[List[Char]] =
         for 
             index <- crates.indices.toList
             (fromIndex, toIndex) = (action.from - 1, action.to - 1)
         yield index match 
-            case `fromIndex` => crates(fromIndex).drop(action.count)
-            case `toIndex` => crates(fromIndex).take(action.count).reverse ++ crates(toIndex)
-            case _ => crates(index)
+            case `fromIndex` => 
+                crates(fromIndex).drop(action.count)
+            case `toIndex` => 
+                crates(fromIndex).take(action.count).pipe(moving => if moveInOrder then moving else moving.reverse) ++ crates(toIndex)
+            case _ =>
+                crates(index)
 
 }
 
@@ -97,4 +114,5 @@ object Day5 {
 def app =
     import Day5.*
     val answer = solve("challenge.txt")
-    println(s"Answer: ${answer.mkString("")}")
+    println(s"Part 1: ${answer._1}")
+    println(s"Part 2: ${answer._2}")
