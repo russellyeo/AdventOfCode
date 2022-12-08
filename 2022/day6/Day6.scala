@@ -5,32 +5,32 @@
 import scala.io.Source
 import scala.collection.mutable.ArrayBuffer
 
-class Parser(filename: String):
+class PacketDecoder(filename: String, markerSize: Int):
     val source: Source = Source.fromResource(filename)
     val buffer = ArrayBuffer[Char]()
 
-    def solve(): Int =
-        findMatch(0)
+    def findStartOfMessage(): Int =
+        findMarkerPosition(0)
     
-    def findMatch(position: Int): Int =
-        if buffer.size < 4 then
+    def findMarkerPosition(position: Int): Int =
+        if buffer.size < markerSize then
             buffer.addOne(source.next())
-            findMatch(position + 1)
+            findMarkerPosition(position + 1)
         else if bufferIsUnique() then
             position
         else 
             buffer.trimStart(1)
             buffer.addOne(source.next())
-            findMatch(position + 1)
+            findMarkerPosition(position + 1)
  
     def bufferIsUnique(): Boolean =
         buffer.toSet.size == buffer.size
 
 
-end Parser
+end PacketDecoder
 
 @main
 def app = 
-    val parser = Parser("challenge.txt")
-    val answer = parser.solve()
-    println(answer)
+    val decoder = PacketDecoder("challenge.txt", 14)
+    val startOfMessage = decoder.findStartOfMessage()
+    println(startOfMessage)
