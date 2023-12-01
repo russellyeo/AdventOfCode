@@ -1,5 +1,8 @@
 import Foundation
 import Solution
 
-let answer = Puzzle().solve(for: partA)
-print("Answer: \(answer)")
+let answerPartOne = PartOne().solve(for: challenge)
+print("Answer (Part One): \(answerPartOne)")
+
+let answerPartTwo = PartTwo().solve(for: challenge)
+print("Answer (Part One): \(answerPartTwo)")

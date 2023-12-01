@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "Day1",
     platforms: [
-        .macOS(.v10_15),
+        .macOS(.v14),
     ],
     products: [
         .executable(

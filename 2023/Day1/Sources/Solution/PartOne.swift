@@ -1,4 +1,4 @@
-public struct Puzzle {
+public struct PartOne {
     public init() {}
     
     public func solve(for input: String) -> Int {
@@ -17,3 +17,4 @@ public struct Puzzle {
             .reduce(into: 0, +=)
     }
 }
+
