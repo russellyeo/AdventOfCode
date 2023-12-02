@@ -3,8 +3,11 @@ import Solution
 do {
     var rawInput = challenge[...]
     let puzzleInput = try PuzzleInput().parse(&rawInput)
-    let answer = Analyser().sumOfValidGameIDs(games: puzzleInput, maxPossible: [.red: 12, .green: 13, .blue: 14])
-    print("Answer: \(answer)")
+    let analyser = Analyser(games: puzzleInput)
+    let partOne = analyser.sumOfValidGameIDs(maxPossible: [.red: 12, .green: 13, .blue: 14])
+    let partTwo = analyser.sumOfPowersOfMinimumCubes()
+    print("Answer (Part One): \(partOne)")
+    print("Answer (Part Two): \(partTwo)")
 } catch {
     print("Error: \(error)")
 }
