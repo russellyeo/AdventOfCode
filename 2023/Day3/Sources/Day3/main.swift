@@ -2,13 +2,11 @@ import Solution
 import Parsing
 
 do {
-    var rawInput = example[...]
-    let parser = PuzzleInput()
-    let puzzleInput = try parser.parse(&rawInput)
-    let printBack = try parser.print(puzzleInput)
-
-    print("Puzzle Input:\n\(printBack)")
-//    print("Answer (Part One): \(partOne)")
+    var rawInput = challenge[...]
+    let grid = try PuzzleInput().parse(&rawInput)
+    let schematic = EngineSchematic(grid: grid)
+    let partOne = schematic.sumOfValidPartNumbers()
+    print("Answer (Part One): \(partOne)") // 528231 is the wrong answer
 //    print("Answer (Part Two): \(partTwo)")
 } catch {
     print("Error: \(error)")
