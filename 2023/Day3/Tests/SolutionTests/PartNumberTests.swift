@@ -5,13 +5,10 @@ import XCTest
 final class PartNumberTests: XCTestCase {
     
     func testOwnRegion() throws {
-        let number = PartNumber(
-            value: 35,
-            positions: [
-                Position(x: 2, y: 2): "3",
-                Position(x: 3, y: 2): "5"
-            ]
-        )
+        let number = PartNumber(cells: [
+            Cell(position: .init(x: 2, y: 2), type: .integer("3")),
+            Cell(position: .init(x: 3, y: 2), type: .integer("5"))
+        ])
         let region: Region = number.ownRegion
         // Positions inside the region are included
         XCTAssertTrue(region(Position(x: 2, y: 2)))
@@ -29,13 +26,10 @@ final class PartNumberTests: XCTestCase {
     }
     
     func testSurroundingRegion() throws {
-        let number = PartNumber(
-            value: 35,
-            positions: [
-                Position(x: 2, y: 2): "3",
-                Position(x: 3, y: 2): "5"
-            ]
-        )
+        let number = PartNumber(cells: [
+            Cell(position: .init(x: 2, y: 2), type: .integer("3")),
+            Cell(position: .init(x: 3, y: 2), type: .integer("5"))
+        ])
         let region: Region = number.surroundingRegion(range: 1)
         // Direct hits are discounted
         XCTAssertFalse(region(Position(x: 2, y: 2)))

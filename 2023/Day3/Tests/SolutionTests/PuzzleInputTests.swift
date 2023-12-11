@@ -18,6 +18,6 @@ final class PuzzleInputTests: XCTestCase {
         var input = example[...]
         let output = try PuzzleInput().parse(&input)
         let expected = Grid.example
-        XCTAssertEqual(output.value, expected.value)
+        XCTAssertEqual(output, expected)
     }
 }

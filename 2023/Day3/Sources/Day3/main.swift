@@ -6,7 +6,7 @@ do {
     let grid = try PuzzleInput().parse(&rawInput)
     let schematic = EngineSchematic(grid: grid)
     let partOne = schematic.sumOfValidPartNumbers()
-    print("Answer (Part One): \(partOne)") // 528231 is the wrong answer
+    print("Answer (Part One): \(partOne)")
 //    print("Answer (Part Two): \(partTwo)")
 } catch {
     print("Error: \(error)")
