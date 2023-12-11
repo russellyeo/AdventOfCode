@@ -9,7 +9,7 @@ final class PartNumberTests: XCTestCase {
             Cell(position: .init(x: 2, y: 2), type: .integer("3")),
             Cell(position: .init(x: 3, y: 2), type: .integer("5"))
         ])
-        let region: Region = number.ownRegion
+        let region: Region = number.region
         // Positions inside the region are included
         XCTAssertTrue(region(Position(x: 2, y: 2)))
         XCTAssertTrue(region(Position(x: 3, y: 2)))
@@ -30,7 +30,7 @@ final class PartNumberTests: XCTestCase {
             Cell(position: .init(x: 2, y: 2), type: .integer("3")),
             Cell(position: .init(x: 3, y: 2), type: .integer("5"))
         ])
-        let region: Region = number.surroundingRegion(range: 1)
+        let region: Region = number.surrounding(range: 1)
         // Direct hits are discounted
         XCTAssertFalse(region(Position(x: 2, y: 2)))
         XCTAssertFalse(region(Position(x: 3, y: 2)))
@@ -63,6 +63,24 @@ final class PartNumberTests: XCTestCase {
         XCTAssertFalse(region(Position(x: 5, y: 2)))
         XCTAssertFalse(region(Position(x: 5, y: 3)))
         XCTAssertFalse(region(Position(x: 5, y: 4)))
+    }
+    
+    func testIsNeighbouringCell() throws {
+        let cell = Cell(position: .init(x: 3, y: 1), type: .symbol("*"))
+        let partNumber = PartNumber(cells: [
+            Cell(position: .init(x: 2, y: 2), type: .integer("3")),
+            Cell(position: .init(x: 3, y: 2), type: .integer("5"))
+        ])
+        XCTAssertTrue(partNumber.isNeighbouring(cell: cell, range: 1))
+    }
+    
+    func testIsNotNeighbouringCell() throws {
+        let cell = Cell(position: .init(x: 4, y: 4), type: .symbol("*"))
+        let partNumber = PartNumber(cells: [
+            Cell(position: .init(x: 2, y: 2), type: .integer("3")),
+            Cell(position: .init(x: 3, y: 2), type: .integer("5"))
+        ])
+        XCTAssertFalse(partNumber.isNeighbouring(cell: cell, range: 1))
     }
     
 }

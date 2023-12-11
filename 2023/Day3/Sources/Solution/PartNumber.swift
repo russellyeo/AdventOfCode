@@ -1,14 +1,11 @@
-//
-//  File.swift
-//  
-//
-//  Created by Russell Yeo on 11/12/2023.
-//
+import Foundation
 
 public struct PartNumber: Equatable {
     /// The cells in the part number
     let cells: [Cell]
-    
+}
+
+extension PartNumber {
     /// The integer value of the part number
     var value: Int {
         let string = cells.reduce(into: "", { accumulator, cell in
@@ -19,16 +16,20 @@ public struct PartNumber: Equatable {
     }
     
     /// The region of the part number in the grid
-    var ownRegion: Region {
+    var region: Region {
         Region { position in cells.map(\.position).contains(where: { $0 == position }) }
     }
     
     /// The surrounding region with given range away from the part itself (chessboard distance)
-    func surroundingRegion(range: Int) -> Region {
+    func surrounding(range: Int) -> Region {
         cells.map(\.position).reduce(Region.empty(), { result, position in
             result.union(with: Region.square(range: range).shift(by: position))
         })
-        .subtract(ownRegion)
+        .subtract(region)
+    }
+    
+    func isNeighbouring(cell: Cell, range: Int) -> Bool {
+        surrounding(range: range)(cell.position)
     }
 }
 

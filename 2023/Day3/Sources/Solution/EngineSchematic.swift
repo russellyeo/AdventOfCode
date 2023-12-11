@@ -8,53 +8,36 @@ public struct EngineSchematic {
     }
     
     public func sumOfValidPartNumbers() -> Int {
-        let allNumbers = findAllPartNumbers()
-        return allNumbers.reduce(into: 0) { result, part in
-            if isSurroundedBySymbol(part: part) {
-                result += part.value
+        let allSymbols = grid.findAllSymbols()
+        
+        return findNeighbours(for: allSymbols)
+            .values
+            .reduce(into: 0) { sum, neighbours in
+                sum += neighbours.reduce(into: 0) { accumulator, number in
+                    accumulator += number.value
+                }
+            }
+    }
+    
+    public func sumOfGearRatios() -> Int {
+        let allGears = grid.findAllCells(of: .symbol("*"))
+
+        return findNeighbours(for: allGears)
+            .values
+            .reduce(into: 0) { sum, neighbours in
+                guard neighbours.count == 2 else { return }
+                sum += neighbours[0].value * neighbours[1].value
+            }
+    }
+    
+    private func findNeighbours(for cells: [Cell]) -> [Cell: [PartNumber]] {
+        let allNumbers = grid.findAllPartNumbers()
+        
+        return cells.reduce(into: [Cell: [PartNumber]]()) { result, cell in
+            result[cell] = allNumbers.filter { number in
+                number.isNeighbouring(cell: cell, range: 1)
             }
         }
     }
     
-    func findAllPartNumbers() -> [PartNumber] {
-        var numbers: [PartNumber] = []
-        
-        for row in grid.value {
-            var cells: [Cell] = []
-
-            for cell in row {
-                switch cell.type {
-                case .empty, .symbol:
-                    if !cells.isEmpty {
-                        let number = PartNumber(cells: cells)
-                        numbers.append(number)
-                        cells = []
-                    }
-                case .integer:
-                    cells.append(cell)
-                }
-            }
-            if !cells.isEmpty {
-                let number = PartNumber(cells: cells)
-                numbers.append(number)
-            }
-            cells = []
-        }
-        
-        return numbers
-    }
-    
-    func isSurroundedBySymbol(part: PartNumber) -> Bool {
-        let surrounding = part.surroundingRegion(range: 1)
-        for y in 0..<grid.value.count {
-            for x in 0..<grid.value[0].count {
-                let position = Position(x: x, y: y)
-                if surrounding(position), case .symbol = grid.value[y][x].type {
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
 }

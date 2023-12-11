@@ -47,6 +47,6 @@ struct Region {
     func subtract(_ other: Region) -> Region {
         intersect(with: other.invert())
     }
-    
+
 }
 
