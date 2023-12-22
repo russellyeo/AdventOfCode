@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Card: Equatable {
+public struct Card: Hashable, Identifiable {
     public let id: Int
     public let winning: [Int]
     public let mine: [Int]
