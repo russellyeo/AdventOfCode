@@ -2,6 +2,7 @@ import Day1
 import Day2
 import Day3
 import Day4
+import Day5
 import Foundation
 import Solutions
 
@@ -16,6 +17,8 @@ struct ProblemStrategy {
             return DayThree(input: input)
         case 4:
             return DayFour(input: input)
+        case 5:
+            return DayFive(input: input)
         default:
             throw ProblemStrategyError.solutionNotFound(day: day)
         }

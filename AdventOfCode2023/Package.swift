@@ -19,7 +19,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-parsing", from: "0.13.0"),
-        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0")
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0"),
+        .package(url: "https://github.com/pointfreeco/swift-custom-dump", from: "1.1.2")
     ],
     targets: [
         .executableTarget(
@@ -96,6 +97,9 @@ let package = Package(
         .testTarget(name: "Day2Tests", dependencies: ["Day2"]),
         .testTarget(name: "Day3Tests", dependencies: ["Day3"]),
         .testTarget(name: "Day4Tests", dependencies: ["Day4"]),
-        .testTarget(name: "Day5Tests", dependencies: ["Day5"])
+        .testTarget(name: "Day5Tests", dependencies: [
+            "Day5", 
+            .product(name: "CustomDump", package: "swift-custom-dump")
+        ])
     ]
 )

@@ -9,6 +9,7 @@ public struct DayFive: Day {
     
     public func run(part: Part) throws -> String {
         var rawInput = input[...]
+        let almanac: Almanac = try AlmanacParser().parse(&rawInput)
         
         switch part {
         case .one:
