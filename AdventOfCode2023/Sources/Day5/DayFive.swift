@@ -13,9 +13,12 @@ public struct DayFive: Day {
         
         switch part {
         case .one:
-            return "TODO"
+            guard let location = almanac.findClosestLocation() else {
+                throw SolutionError.noValueFound(part: part)
+            }
+            return String(location)
         case .two:
-            return "TODO"
+            throw SolutionError.unimplemented(part: part)
         }
     }
 }
